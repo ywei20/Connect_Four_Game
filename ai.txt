@@ -1,0 +1,55 @@
+-Did you attempt to make your computer player very smart -- i.e., do something more clever than just pick a random legal move?
+    Yes
+
+-If so, were you able to accomplish this? Is your computer player as smart as you would like?
+    Yes
+
+-How did you determine which piece to play next? Tell us about your “pick next move” algorithm
+    Generally speaking, I evaluate the board and get a score for one side of player based on my
+    scoring strategies after every placement of disk, and pick the move that gives me highest score.
+    Based on some research, I implement minimax algorithm and get the score involving a certain number
+    of steps ahead, this number is depth, the higher depth you goes, the smarter the AI is but it consumes
+    more time for the computer to decide a move. 
+    Here is how I break down the tasks:
+    1). decide scoring strategies for a window of length 4.
+        A window is an array of length 4 of continuous 4 cells, could be at the same column, or the same
+        row, or the same diagonal line. 
+        a).Offensive strategies:
+            If placing a disk of my side results a window of 4 disks of my disks, I will adds up
+        score by 100;
+            If it results in 3 disks of my side at the window and 1 empty cell, adds up score by 5;
+            If it results in 2 disks of my side at the window and 2 empty cell, adds up score by 2;
+        b).Defensive strategies:
+            If my placement of disks leaves opponent have 3 disks and 1 empty cell in the window, deduct 80 points;
+            If it leaves opponent have 2 disks and 2 empty cells, subtract 2;
+            If opponent has 1 disk and 3 empty cells, subtract 1.
+    2). calculate a total score for a placement of disk
+         A board gives us many this kinds of windows of length 4.
+         Traverse the board horizontally, vertically, and diagonally, calculate all score of windows at 
+         each row, each column and each diagonal line, then sum up all the scores, thus we can score a move for one side.
+    3). Pick the best move with highest score
+        At each step, when it is the computer's turn, we create a list of all available columns that are not filled up yet.
+        The base pick_best_move is: for each of these available columns, make a copy of the board, place a move at the 
+        column, then calculate a score on the new board. The computer then pick whichever column that yields the highest score.
+    4). Step 1-3 already makes the computer much smarter than playing by random choice, but the decision only bases on
+        one step ahead and does not take into account how the opponent will react. 
+        Minimax algorithm, goes one step ahead(or more steps ahead depending on the depth you set). It applies
+        DFS(depth first search), for each path, human player and AI take turns to pick whatever columns that are optimal to themselves.
+        AI goes choose a column first, then human player decides his/her columns to place new disk and creates new boards 
+        for every new move AI goes in the last step. When it is AI's turn, it wants to maximize the score; when it is human player's 
+        turn, it wants to minimize the score. depth reduces by 1 for each recursion, thus if depth equals 0 or the game is over, 
+        scores of different boards will be evaluated and the boards' parent player will decide either choose the move 
+        with minimum score(human player) or maximum score(AI). From bottom to Up, the AI will make the final call as the root.
+        (Note, parameter of depth must be integer greater than 0. If depth == 1, it works like step 3, without considering opponent's
+        decision. If depth is > 7, my computer will run slowly. So I suggest set depth between 3-5)
+
+-How often did your computer program beat you, or your friends, or whoever tested it out for you?
+        It beats me like 7 out of 10, I win 1 time and 2 draw.
+
+-How would you improve it in the future?
+        Maybe setting more reasonable scoring strategies. Or develop deep learning AI. 
+
+
+Reference:
+Algorithms Explained - minimax and alpha-beta pruning
+https://www.youtube.com/watch?v=l-hh51ncgDI&t=3s
